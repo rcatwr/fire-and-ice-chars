@@ -15,10 +15,7 @@
           class="mt-5"
         ></v-progress-circular>
         <!-- Search results -->
-        <results
-          v-else
-          :results="results"
-        />
+        <results v-else :results="results" />
       </v-layout>
     </v-content>
   </v-app>
@@ -32,12 +29,12 @@ export default {
   name: "App",
   components: {
     SearchBarInput,
-    Results
+    Results,
   },
   data: () => ({
     isLoading: false,
     // An array of Song of Ice and Fire Characters to display
-    results: []
+    results: [],
   }),
   methods: {
     /**
@@ -48,8 +45,23 @@ export default {
       this.isLoading = false;
 
       // EXERCISE - Implement logic to handle the API response.
-      console.log(response); // eslint-disable-line no-console
-    }
-  }
+
+      // RM step 3: name, alias, gender, culture, date of birth, date of death (if present), and allegiances
+      // formatted to an object and passed to the component's results array
+
+      const characters = response.map((char) => ({
+        name: char.name,
+        birth: char.birth,
+        death: char.death,
+        house: char.house.flat(),
+        culture: char.culture,
+        gender: char.gender,
+        aliases: char.aliases,
+      }));
+
+      this.results = characters;
+      //console.log(characters); // eslint-disable-line no-console
+    },
+  },
 };
 </script>
