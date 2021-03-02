@@ -53,6 +53,7 @@ export default {
         name: char.name,
         birth: char.birth,
         death: char.death,
+        // flatten this array 
         house: char.house.flat(),
         culture: char.culture,
         gender: char.gender,
