@@ -6,7 +6,7 @@
         ref="searchinput"
         v-on:search-submitted="isLoading = true"
         v-on:search-responded="searchResponded"
-        :url="url"
+       
       />
         <template v-slot:extension>
         <v-tabs
@@ -69,10 +69,12 @@ export default {
     // An array of Song of Ice and Fire Characters to display
     results: [],
     init: true,
-    url: "base",
+    //url: " ",
     
   }),
   methods: {
+   
+
     /**
      * When the API responds, display search results
      * @param {object} response - API response
@@ -102,8 +104,10 @@ export default {
       console.log(characters.length); // eslint-disable-line no-console
     },
     pageUpdate(url){
-      this.url = url;
-      this.$refs.searchinput.submitSearch(url);
+      //console.log('update')
+      //this.url = url;
+      //this.$emit("link-update", url);
+      this.$refs.searchinput.selectEndpointAndTrigger(url);
     }
 
   },

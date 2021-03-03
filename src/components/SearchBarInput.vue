@@ -1,8 +1,8 @@
-<template >
+<template>
   <v-layout align-center justify-center>
     <v-flex xs12 sm6 >
       <v-form @submit.prevent="submitSearch" class="light">
-        <v-text-field
+        <v-text-field 
           class="inputField"
           label="Search Character Name"
           prepend-inner-icon="search"
@@ -35,13 +35,13 @@ const API_ENDPOINT_CHARACTERS =
 
 export default {
   name: "SearchBarInput",
-  props: {
-    url: {
-      type: String,
-      required: true,
-      default: 'base'
-    }
-  },
+  // props: {
+  //   url: {
+  //     type: String,
+  //     required: true,
+  //     default: 'base',
+  //   }
+  // },
   data: () => ({
     searchInput: "",
     resultsLength: "",
@@ -49,27 +49,35 @@ export default {
     prev:'',
     next: '',
     last: '',
+    final: API_ENDPOINT_CHARACTERS,
   }),
   methods: {
+     selectEndpointAndTrigger(trigger){
+       console.log('trigger:', trigger)
+      const endpoint = {
+        base: API_ENDPOINT_CHARACTERS,
+        first: this.first,
+        prev: this.prev,
+        next: this.next , 
+        last: this.last,
+      }
+      this.final = endpoint[trigger]
+      this.submitSearch()
+     },
+
     /**
      * When the user submits their search request (hits enter) query the API endpoint
      */
     // set to async
     async submitSearch() {
 
-      
+       console.log('PRESEARCH __ 1st:',this.first, 'next:', this.next, 'prev',this.prev, 'last', this.last, 'url', this.url)
 
       this.$emit("search-submitted");
 
-      const endpoint = {
-        base: API_ENDPOINT_CHARACTERS,
-        first: this.first ,
-        prev: this.prev,
-        next: this.next , 
-        last: this.last,
-      }
+    
 
-      const response = await axios.get(endpoint[this.url], {
+      const response = await axios.get(this.final, {
         params: {
           // EXERCISE - Implement query GET parameters to search by name. Watch for case sensitivity.
 
@@ -79,14 +87,14 @@ export default {
         },
       });
 
-      const links = parse(response.headers.link)
+      const links = await parse(response.headers.link)
       
-      this.first = links.first.url
-      this.next = links.next ? links.next.url : null;
-      this.prev = links.prev ? links.prev.url : null;
-      this.last = links.last.url
+      this.first = await links.first.url
+      this.next = await links.next ? links.next.url : null;
+      this.prev = await links.prev ? links.prev.url : null;
+      this.last = await links.last.url
 
-      console.log(this.first, this.next, this.prev, this.last, 'url', this.url)
+      console.log('1st:',this.first, 'next:', this.next, 'prev',this.prev, 'last', this.last, 'url', this.url)
 
       // wait for the response from names api call, and pull out the allegiances array of urls
       const houses = await response.data.map((char) => char.allegiances);
