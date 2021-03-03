@@ -6,6 +6,7 @@
         ref="searchinput"
         v-on:search-submitted="isLoading = true"
         v-on:search-responded="searchResponded"
+        v-on:active-nav-links="setActiveLinks"
        
       />
         <template v-slot:extension>
@@ -19,10 +20,10 @@
           <v-tab v-on:click="pageUpdate('first')">
               first page
           </v-tab>
-          <v-tab v-on:click="pageUpdate('prev')">
+          <v-tab :disabled="!activeLinks.prev" v-on:click="pageUpdate('prev')">
               previous 
           </v-tab>
-           <v-tab v-on:click="pageUpdate('next')">
+           <v-tab :disabled="!activeLinks.next" v-on:click="pageUpdate('next')">
               next
           </v-tab>
           <v-tab v-on:click="pageUpdate('last')">
@@ -69,11 +70,14 @@ export default {
     // An array of Song of Ice and Fire Characters to display
     results: [],
     init: true,
-    //url: " ",
+    activeLinks: {},
     
   }),
   methods: {
-   
+    setActiveLinks(links){
+      console.log('link', links)
+      this.activeLinks = links
+    },
 
     /**
      * When the API responds, display search results
@@ -81,7 +85,7 @@ export default {
      */
     searchResponded(response) {
       this.isLoading = false;
-
+      
       // EXERCISE - Implement logic to handle the API response.
 
       // RM step 3: name, alias, gender, culture, date of birth, date of death (if present), and allegiances

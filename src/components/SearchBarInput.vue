@@ -62,22 +62,25 @@ export default {
         last: this.last,
       }
       this.final = endpoint[trigger]
-      this.submitSearch()
+      this.submitSearch(trigger)
      },
 
     /**
      * When the user submits their search request (hits enter) query the API endpoint
      */
     // set to async
-    async submitSearch() {
+    async submitSearch(trigger) {
+       console.log('triggr:  ', trigger)
+       this.final = typeof trigger === 'object' ? API_ENDPOINT_CHARACTERS : this.final;
 
        console.log('PRESEARCH __ 1st:',this.first, 'next:', this.next, 'prev',this.prev, 'last', this.last, 'url', this.url)
 
       this.$emit("search-submitted");
 
-    
+      console.log('this final', this.final)
 
       const response = await axios.get(this.final, {
+        
         params: {
           // EXERCISE - Implement query GET parameters to search by name. Watch for case sensitivity.
 
@@ -93,6 +96,13 @@ export default {
       this.next = await links.next ? links.next.url : null;
       this.prev = await links.prev ? links.prev.url : null;
       this.last = await links.last.url
+
+      const linksClicked = {first: this.first,
+        prev: this.prev,
+        next: this.next , 
+        last: this.last,}
+
+      this.$emit('active-nav-links', linksClicked)
 
       console.log('1st:',this.first, 'next:', this.next, 'prev',this.prev, 'last', this.last, 'url', this.url)
 

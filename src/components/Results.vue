@@ -48,10 +48,10 @@
     </v-card>
   </v-container>
   <v-container v-else-if="init">
-    <p class="message display-1 blue--text text--darken-3 font-weight-light">Search for a character!</p>
+    <p class="message body-2 blue--text text--darken-3 font-weight-light">Enter the name of a character above and hit "Return"<br> Leave it empty, and hit "Return" to list all characters.</p>
   </v-container>
     <v-container v-else>
-    <p class="message display-1 blue--text text--darken-3 font-weight-light"><v-icon large class='err' color='red lighten-3'>error</v-icon> Oops! Please try again!</p>
+    <p class="message body-2 blue--text text--darken-3 font-weight-light"><v-icon small class='err' color='red lighten-3'>error</v-icon> Oops! Check the spelling of the character's name and try it again.</p>
   </v-container>
 </template>
 
