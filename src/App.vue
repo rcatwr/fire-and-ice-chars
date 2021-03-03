@@ -1,11 +1,35 @@
 <template>
   <v-app>
 
-    <v-toolbar app >
+    <v-toolbar app color="blue lighten-5" light flat>
       <search-bar-input
+        ref="searchinput"
         v-on:search-submitted="isLoading = true"
         v-on:search-responded="searchResponded"
+        :url="url"
       />
+        <template v-slot:extension>
+        <v-tabs
+          v-if="results.length > 1"
+          color="blue lighten-5"
+          v-model="tab"
+          align-with-title
+        >
+          
+          <v-tab v-on:click="pageUpdate('first')">
+              first page
+          </v-tab>
+          <v-tab v-on:click="pageUpdate('prev')">
+              previous 
+          </v-tab>
+           <v-tab v-on:click="pageUpdate('next')">
+              next
+          </v-tab>
+          <v-tab v-on:click="pageUpdate('last')">
+              last
+          </v-tab>
+        </v-tabs>
+      </template>
     </v-toolbar>
     
     <v-content>
@@ -20,7 +44,7 @@
           class="mt-5"
         ></v-progress-circular>
         <!-- Search results -->
-        <results v-else :results="results" :init="init" />
+        <results v-else :results="results" :init="init"  />
       </v-layout>
     </v-content>
    
@@ -31,17 +55,21 @@
 import SearchBarInput from "./components/SearchBarInput";
 import Results from "./components/Results";
 
+
 export default {
   name: "App",
   components: {
     SearchBarInput,
     Results,
+    
+    
   },
   data: () => ({
     isLoading: false,
     // An array of Song of Ice and Fire Characters to display
     results: [],
     init: true,
+    url: "base",
     
   }),
   methods: {
@@ -73,6 +101,11 @@ export default {
       this.results = characters;
       console.log(characters.length); // eslint-disable-line no-console
     },
+    pageUpdate(url){
+      this.url = url;
+      this.$refs.searchinput.submitSearch(url);
+    }
+
   },
 };
 </script>

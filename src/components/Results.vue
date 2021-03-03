@@ -66,7 +66,8 @@ export default {
     init: {
       type: Boolean,
       required: true,
-    }
+    },
+
   },
 };
 </script>

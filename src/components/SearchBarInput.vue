@@ -12,6 +12,7 @@
           v-model="searchInput"
         ></v-text-field>
 
+         
       </v-form>
        
 
@@ -24,6 +25,7 @@
 
 <script>
 import axios from "axios";
+import parse from "parse-link-header"
 
 /**
  * @link https://anapioficeandfire.com/Documentation#characters
@@ -33,10 +35,20 @@ const API_ENDPOINT_CHARACTERS =
 
 export default {
   name: "SearchBarInput",
+  props: {
+    url: {
+      type: String,
+      required: true,
+      default: 'base'
+    }
+  },
   data: () => ({
     searchInput: "",
-    page: 0,
     resultsLength: "",
+    first:'',
+    prev:'',
+    next: '',
+    last: '',
   }),
   methods: {
     /**
@@ -44,17 +56,37 @@ export default {
      */
     // set to async
     async submitSearch() {
+
+      
+
       this.$emit("search-submitted");
 
-      const response = await axios.get(API_ENDPOINT_CHARACTERS, {
+      const endpoint = {
+        base: API_ENDPOINT_CHARACTERS,
+        first: this.first ,
+        prev: this.prev,
+        next: this.next , 
+        last: this.last,
+      }
+
+      const response = await axios.get(endpoint[this.url], {
         params: {
           // EXERCISE - Implement query GET parameters to search by name. Watch for case sensitivity.
 
           name: this.searchInput,
-          pageSize: 10,
-          page: this.page,
+          
+          
         },
       });
+
+      const links = parse(response.headers.link)
+      
+      this.first = links.first.url
+      this.next = links.next ? links.next.url : null;
+      this.prev = links.prev ? links.prev.url : null;
+      this.last = links.last.url
+
+      console.log(this.first, this.next, this.prev, this.last, 'url', this.url)
 
       // wait for the response from names api call, and pull out the allegiances array of urls
       const houses = await response.data.map((char) => char.allegiances);
@@ -76,7 +108,7 @@ export default {
           );
         })
       );
-
+       
       // await the return of the list of houses, and then modify the response.data list:
       // add a new property called "house", plug in the value of "houseText" based on its index.
       // use the .house property in App and Results components to render the allegiences as text strings.

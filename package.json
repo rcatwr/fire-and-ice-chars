@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^2.6.5",
+    "parse-link-header": "^1.0.1",
     "vue": "^2.6.6",
     "vuetify": "^1.5.5"
   },
