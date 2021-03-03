@@ -1,19 +1,26 @@
-<template>
+<template >
   <v-layout align-center justify-center>
-    <v-flex xs12 sm6>
-      <v-form @submit.prevent="submitSearch">
+    <v-flex xs12 sm6 >
+      <v-form @submit.prevent="submitSearch" class="light">
         <v-text-field
-          label="Search"
+          class="inputField"
+          label="Search Character Name"
           prepend-inner-icon="search"
           single-line
           solo
           clearable
           v-model="searchInput"
         ></v-text-field>
+
       </v-form>
+       
+
+ 
+
     </v-flex>
   </v-layout>
 </template>
+
 
 <script>
 import axios from "axios";
@@ -28,6 +35,8 @@ export default {
   name: "SearchBarInput",
   data: () => ({
     searchInput: "",
+    page: 0,
+    resultsLength: "",
   }),
   methods: {
     /**
@@ -42,7 +51,8 @@ export default {
           // EXERCISE - Implement query GET parameters to search by name. Watch for case sensitivity.
 
           name: this.searchInput,
-          pageSize: 20,
+          pageSize: 10,
+          page: this.page,
         },
       });
 
@@ -57,7 +67,7 @@ export default {
 
       const houseText = await Promise.all(
         houses.map(async (item) => {
-         //console.log(item);
+          //console.log(item);
           return await Promise.all(
             item.map(async (url) => {
               const resp = await axios.get(url);
@@ -75,12 +85,17 @@ export default {
         char["house"] = [];
         char["house"].push(houseText[i]);
       });
-        
+
       // transmit modified response data to App and Results
+      this.resultsLength = response.data.length;
       this.$emit("search-responded", response.data);
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+
+
+</style>

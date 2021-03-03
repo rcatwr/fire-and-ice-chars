@@ -1,6 +1,7 @@
 <template>
-  <v-container>
+  <v-container v-if="results.length">
     <v-card
+      
       v-for="(result, index) in results"
       :key="index"
       class="search-result mx-auto mb-2"
@@ -46,6 +47,12 @@
       </v-card-text>
     </v-card>
   </v-container>
+  <v-container v-else-if="init">
+    <p class="message display-1 blue--text text--darken-3 font-weight-light">Search for a character!</p>
+  </v-container>
+    <v-container v-else>
+    <p class="message display-1 blue--text text--darken-3 font-weight-light"><v-icon large class='err' color='red lighten-3'>error</v-icon> Oops! Please try again!</p>
+  </v-container>
 </template>
 
 <script>
@@ -56,6 +63,10 @@ export default {
       type: Array,
       required: true,
     },
+    init: {
+      type: Boolean,
+      required: true,
+    }
   },
 };
 </script>
@@ -69,5 +80,12 @@ export default {
    .account {
      line-height: 1.5em;
    }
+   .message {
+     text-align: center;
+   }
+   .err {
+     line-height: 1.25em;
+   }
+   
 
 </style>

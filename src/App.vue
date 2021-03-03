@@ -1,12 +1,17 @@
 <template>
   <v-app>
-    <v-toolbar app>
+
+    <v-toolbar app >
       <search-bar-input
         v-on:search-submitted="isLoading = true"
         v-on:search-responded="searchResponded"
       />
     </v-toolbar>
+    
     <v-content>
+  
+  
+
       <v-layout justify-center>
         <!-- Loading spinner -->
         <v-progress-circular
@@ -15,9 +20,10 @@
           class="mt-5"
         ></v-progress-circular>
         <!-- Search results -->
-        <results v-else :results="results" />
+        <results v-else :results="results" :init="init" />
       </v-layout>
     </v-content>
+   
   </v-app>
 </template>
 
@@ -35,6 +41,8 @@ export default {
     isLoading: false,
     // An array of Song of Ice and Fire Characters to display
     results: [],
+    init: true,
+    
   }),
   methods: {
     /**
@@ -60,8 +68,10 @@ export default {
         aliases: char.aliases,
       }));
 
+      this.init = false;
+
       this.results = characters;
-      //console.log(characters); // eslint-disable-line no-console
+      console.log(characters.length); // eslint-disable-line no-console
     },
   },
 };
