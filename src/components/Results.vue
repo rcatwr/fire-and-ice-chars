@@ -47,6 +47,7 @@
       </v-card-text>
     </v-card>
   </v-container>
+  <!-- display user messages here. 'init' flag is set on initialization.  Error/bad input message displays when text input search returns no matches -->
   <v-container v-else-if="init">
     <p class="message body-2 blue--text text--darken-3 font-weight-light">Enter the name of a character above and hit "Return"<br> Leave it empty, and hit "Return" to list all characters.</p>
   </v-container>
@@ -63,6 +64,7 @@ export default {
       type: Array,
       required: true,
     },
+    // initialization flag
     init: {
       type: Boolean,
       required: true,
@@ -73,8 +75,7 @@ export default {
 </script>
 
 <style scoped>
-/* .search-result {
-  min-height: 100px; */
+   /* style tweaks */
    li {
      list-style-type: none;
    }
@@ -88,5 +89,4 @@ export default {
      line-height: 1.25em;
    }
    
-
 </style>
