@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app color="blue lighten-5" light flat>
+    <v-toolbar light app prominent color="blue lighten-2">
       <!-- listen for the events on searchBarInput -->
       <search-bar-input
         ref="searchinput"
@@ -9,24 +9,24 @@
         v-on:active-nav-links="setActiveLinks"
       />
       <template v-slot:extension>
-        <!-- display the tab navigation when form submitted without a search term -- looks for more than one result in the api response -->
-        <v-tabs
-          v-if="results.length > 1"
-          color="blue lighten-5"
-          v-model="tab"
-          align-with-title
-        >
-          <!-- set up click events on the tabs to pass values to pageUpdate-->
-          <!-- tabs 'prev' and 'next' are deactivated if there are no links -- if first or last page of results from api -->
-          <v-tab v-on:click="pageUpdate('first')"> first page </v-tab>
-          <v-tab :disabled="!activeLinks.prev" v-on:click="pageUpdate('prev')">
-            previous
-          </v-tab>
-          <v-tab :disabled="!activeLinks.next" v-on:click="pageUpdate('next')">
-            next
-          </v-tab>
-          <v-tab v-on:click="pageUpdate('last')"> last </v-tab>
-        </v-tabs>
+        <v-layout align-center justify-center>
+          <v-row v-if="results.length > 1">
+            <v-btn text v-on:click="pageUpdate('first')"> First Page </v-btn>
+            <v-btn
+              v-on:click="pageUpdate('prev')"
+              :disabled="!activeLinks.prev"
+            >
+              <v-icon color="blue darken-3" large>chevron_left</v-icon>
+            </v-btn>
+            <v-btn
+              v-on:click="pageUpdate('next')"
+              :disabled="!activeLinks.next"
+            >
+              <v-icon color="blue darken-3" large>chevron_right</v-icon>
+            </v-btn>
+            <v-btn text v-on:click="pageUpdate('last')"> Last Page </v-btn>
+          </v-row>
+        </v-layout>
       </template>
     </v-toolbar>
 
